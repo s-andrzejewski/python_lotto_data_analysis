@@ -1,6 +1,10 @@
 import os
 from collections import Counter # for run_excercise_5()
 
+#! GitHub repo link: https://github.com/s-andrzejewski/python_lotto_data_analysis
+
+
+
 # *************   Functions:   *************
 
 def init():
@@ -34,12 +38,14 @@ def show_menu_options():
         "zadanie 7: własne ciekawe przetwarzanie"
     )
 
+    call_to_action = "Wybierz odpowiednią opcję, aby rozpocząć zadanie (1-7)."
+
     nl = "\n"           #* new line
     div = 2*nl          #* divider
 
     options_stringified = nl.join(options_list)
 
-    print(header+div+description+div+options_stringified+call_to_action)
+    print(header+div+description+div+options_stringified+div+call_to_action)
 
 
 
@@ -98,6 +104,7 @@ def prepare_data():
     data = get_data()
     how_many_counter = 0
     which_lines_counter = []
+    
     return data, how_many_counter, which_lines_counter
 
 
