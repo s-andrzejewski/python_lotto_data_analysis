@@ -1,10 +1,15 @@
 import os
+from collections import Counter # for run_excercise_5()
 
 # *************   Functions:   *************
 
 def init():
     while True:
-        menu()
+        clear()
+        show_menu_options()
+        
+        selected_option = receive_selected_option()
+        run_selected_option(selected_option)
         end_check = input("Aby zamknąć program wciśnij 0 na klawiaturze, każdy inny wpis otworzy program na nowo.")
 
         if end_check.isdigit() and end_check == 0:
@@ -13,14 +18,6 @@ def init():
             continue
 
     exit()
-
-
-
-def menu():
-    clear()
-    show_menu_options()
-    selected_option = receive_selected_option()
-    run_selected_option(selected_option)
 
 
 
@@ -48,7 +45,7 @@ def show_menu_options():
 
 def receive_selected_option():
     user_selection = input("Wpisz cyfrę zadania aby uruchomić funkcję:")
-    selected_option = null
+    selected_option = None
 
     while not user_selection.isdigit():
         user_selection = input("Błędna wartość, spróbuj jeszcze raz: ")
@@ -97,6 +94,14 @@ def run_selected_option(selected_option):
 ? 7. L_6
 """
 
+def prepare_data():
+    data = get_data()
+    how_many_counter = 0
+    which_lines_counter = []
+    return data, how_many_counter, which_lines_counter
+
+
+
 def get_data():
     file_lines_list = get_file_lines()
     organized_list = organize_file_lines(file_lines_list)
@@ -119,7 +124,7 @@ def get_file_lines():
     finally:
         lotto_file.close()
     
-    lotto_file_records.pop(0)
+    lotto_file_records.pop(0) #* delete first record (table heading)
     return lotto_file_records
 
 
@@ -148,10 +153,8 @@ def organize_file_lines(file_lines):
 
 def run_excercise_1():
 #? zadanie 1: tylko liczby parzyste
-    # list of dictornaries
-    data = get_data()
-    how_many_counter = 0
-    which_lines_counter = []
+    # list of dictionaries
+    data, how_many_counter, which_lines_counter = prepare_data()
 
     for index, dict in enumerate(data):
         drawn_numbers = dict['drawn_numbers']
@@ -160,15 +163,13 @@ def run_excercise_1():
             how_many_counter += 1
             which_lines_counter.append(index)
     
-    print("Jest " + how_many_counter + " losowań z samymi liczbami parzystymi.")
+    print(f"Jest {how_many_counter} losowań z samymi liczbami parzystymi.")
 
 
 
 def run_excercise_2():
 #? zadanie 2: suma wylosowanych liczb w przedziale 110 - 190
-    data = get_data()
-    how_many_counter = 0
-    which_lines_counter = []
+    data, how_many_counter, which_lines_counter = prepare_data()
 
     for index, dict in enumerate(data):
         drawn_numbers = dict['drawn_numbers']
@@ -178,16 +179,14 @@ def run_excercise_2():
             how_many_counter += 1
             which_lines_counter.append(index)
 
-    print("Jest " + how_many_counter + " losowań w których suma liczb znajduje się w przedziale od 110 do 190.")
+    print(f"Jest {how_many_counter} losowań w których suma liczb znajduje się w przedziale od 110 do 190.")
 
 
 
 
 def run_excercise_3():
 #? zadanie 3: suma cyfr wszystkich wylosowanych liczb równa 50
-    data = get_data()
-    how_many_counter = 0
-    which_lines_counter = []
+    data, how_many_counter, which_lines_counter = prepare_data()
     target_sum = 50
 
     for index, dict in enumerate(data):
@@ -199,15 +198,13 @@ def run_excercise_3():
             how_many_counter += 1
             which_lines_counter.append(index)
 
-    print("Jest " + how_many_counter + " losowań z sumą cyfr wylosowanych liczb równą " + target_sum + ".")
+    print(f"Jest {how_many_counter} losowań z sumą cyfr wylosowanych liczb równą {target_sum}.")
 
 
 
 def run_excercise_4():
 #? zadanie 4: różnica między największą a najmniejszą równa 30
-    data = get_data()
-    how_many_counter = 0
-    which_lines_counter = []
+    data, how_many_counter, which_lines_counter = prepare_data()
     target_value = 30
 
     for index, dict in enumerate(data):
@@ -217,29 +214,95 @@ def run_excercise_4():
         last = sorted_numbers[-1]
         difference = last - first
 
-        if difference == target_value
+        if difference == target_value:
             how_many_counter += 1
             which_lines_counter.append(index)
 
-    print("Jest " + how_many_counter + " losowań z róźnicą między największą a najmniejszą liczbą równą " + target_value + ".")
+    print(f"Jest {how_many_counter} losowań z róźnicą między największą a najmniejszą liczbą równą {target_value}.")
 
 
 
 def run_excercise_5():
 #? zadanie 5: cztery wylosowane liczby o takiej samej ostatniej cyfrze
-    example = 0
+    data, how_many_counter, which_lines_counter = prepare_data()
 
+    # stores the same list but last digits instead of whole numbers
+    files_last_digits = [] # list of lists
+
+    for index, dict in enumerate(data):
+        drawn_numbers = dict['drawn_numbers']
+        lines_last_digits = []
+
+        for number in drawn_numbers:
+            # 24, 21, 4, 14, 94, 11
+            last_digit = int(str(number)[-1])
+            # 4, 1, 4, 4, 4, 1
+            lines_last_digits.append(last_digit)  # list contains last digits of numbers instead of original numbers
+        # [[4, 1, 4, 4, 4, 1],[...],...]
+        files_last_digits.append(lines_last_digits)
+
+    for index, line in enumerate(files_last_digits):
+        if check_repeats(line, 4):
+            how_many_counter += 1
+            which_lines_counter.append(index)
+    
+    print(f"Jest {how_many_counter} losowań z czterema liczbami o takiej samej ostatniej cyfrze.")
+    
 
 
 def run_excercise_6():
 #? zadanie 6: cztery wylosowane liczby w jednym z zakresów: 1-9 albo 10-19 albo 20-29 albo 30-39 albo 40-49
-    example = 0
+
+    data, how_many_counter, which_lines_counter = prepare_data()
+
+    for index, dict in enumerate(data):
+        drawn_numbers = dict['drawn_numbers']
+
+        counter_1_9 = counter_10_19 = counter_20_29 = counter_30_39 = counter_40_49 = 0
+
+        for number in drawn_numbers:
+            # 1, 2, 4, 8, 9, 9
+            if 1 <= number <= 9:
+                counter_1_9 += 1
+            elif 10 <= number <= 19:
+                counter_10_19 += 1
+            elif 20 <= number <= 29:
+                counter_20_29 += 1
+            elif 30 <= number <= 39:
+                counter_30_39 += 1
+            elif 40 <= number <= 49:
+                counter_40_49 += 1
+        
+        if counter_1_9 == 4 or counter_10_19 == 4 or counter_20_29 == 4 or counter_30_39 == 4 or counter_40_49 == 4:
+            how_many_counter += 1
+            which_lines_counter.append(index)
+    
+    print(f"Jest {how_many_counter} losowań z czterema liczbami w jednym z zakresów: 1-9 albo 10-19 albo 20-29 albo 30-39 albo 40-49.")
 
 
 
 def run_excercise_7():
 #? zadanie 7: własne ciekawe przetwarzanie
-    example = 0
+# Sprawdza, czy istnieją trzy kolejne liczby w liście, których suma jest równa 29.
+
+    data, how_many_counter, which_lines_counter = prepare_data()
+
+    for index, dict in enumerate(data):
+        drawn_numbers = dict['drawn_numbers']
+
+        #* example: [a, b, c, d, e]:
+        for i in range(len(drawn_numbers) - 2):
+            #* 0 -> a + b + c
+            #* 1 -> b + c + d
+            #* 2 -> c + d + e
+            sum_of_three = drawn_numbers[i] + drawn_numbers[i + 1] + drawn_numbers[i + 2]
+
+            if sum_of_three == 29:
+                how_many_counter += 1
+                which_lines_counter.append(index)
+                break  #* If found, no need to continue checking for the current set of numbers
+
+    print(f"Jest {how_many_counter} losowań z trzema kolejnymi liczbami, których suma wynosi 29.")
 
 
 
@@ -247,6 +310,19 @@ def run_excercise_7():
 
 def clear():
     os.system('clear')
+
+
+def check_repeats(lst, target_count):
+    #* Count occurrences of each element in the list
+    counts = Counter(lst)
+
+    #* Check if any element occurs exactly target_count times
+    for element, count in counts.items():
+        if count == target_count:
+            return True
+
+    return False
+
 
 def end_program():
     msg = "Dziękujemy za skorzystanie z programu."
