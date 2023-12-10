@@ -132,9 +132,9 @@ def organize_file_lines(file_lines):
 
         # Creating a dictionary with keys and values
         dictionary = {
-            'number': values[0],
+            'number': int(values[0]),
             'date': values[1],
-            'drawn_numbers': [values[2], values[3], values[4], values[5], values[6], values[7]]
+            'drawn_numbers': [int(values[2]), int(values[3]), int(values[4]), int(values[5]), int(values[6]), int(values[7])]
         }
         # line is organized now
 
