@@ -11,18 +11,10 @@ def init():
     while True:
         clear()
         show_menu_options()
-        
+
         selected_option = receive_selected_option()
+
         run_selected_option(selected_option)
-        end_check = input("Aby zamknąć program wciśnij 0 na klawiaturze, każdy inny wpis otworzy program na nowo.")
-
-        if end_check.isdigit() and end_check == 0:
-            break
-        else:
-            continue
-
-    exit()
-
 
 
 def show_menu_options():
@@ -38,39 +30,35 @@ def show_menu_options():
         "zadanie 7: własne ciekawe przetwarzanie"
     )
 
-    call_to_action = "Wybierz odpowiednią opcję, aby rozpocząć zadanie (1-7)."
-
     nl = "\n"           #* new line
     div = 2*nl          #* divider
 
     options_stringified = nl.join(options_list)
 
-    print(header+div+description+div+options_stringified+div+call_to_action)
+    print(header+div+description+div+options_stringified)
 
 
 
 def receive_selected_option():
     user_selection = input("Wpisz cyfrę zadania aby uruchomić funkcję:")
-    selected_option = None
 
     while not user_selection.isdigit():
-        user_selection = input("Błędna wartość, spróbuj jeszcze raz: ")
+        user_selection = input("Błędna wartość, podaj cyfrę od 0 do 7: ")
 
-    while user_selection > 7:
+    while int(user_selection) > 7:
         user_selection = input("Zbyt duża wartość, podaj cyfrę od 0 do 7: ")
-        break
-    selected_option = user_selection
+
+    selected_option = int(user_selection)
 
     return selected_option
 
 
 
 def run_selected_option(selected_option):
-    if selected_option == 0:
-        end_program()
-
-    while selected_option !=0:
+    while True:
         match selected_option:
+            case 0:
+                end_program()
             case 1:
                 run_excercise_1()
             case 2:
@@ -316,7 +304,7 @@ def run_excercise_7():
 ## ******   Functions: Others   ******
 
 def clear():
-    os.system('clear')
+    os.system('cls' if os.name == 'nt' else 'clear')
 
 
 def check_repeats(lst, target_count):
