@@ -2,8 +2,19 @@ import os
 
 # *************   Functions:   *************
 
-def clear():
-    os.system('clear')
+def init():
+    while True:
+        menu()
+        end_check = input("Aby zamknąć program wciśnij 0 na klawiaturze, każdy inny wpis otworzy program na nowo.")
+
+        if end_check.isdigit() and end_check == 0:
+            break
+        else:
+            continue
+
+    exit()
+
+
 
 def menu():
     clear()
@@ -135,11 +146,107 @@ def organize_file_lines(file_lines):
 
 ## ******   Functions: Tasks   ******
 
+def run_excercise_1():
+#? zadanie 1: tylko liczby parzyste
+    # list of dictornaries
+    data = get_data()
+    how_many_counter = 0
+    which_lines_counter = []
 
+    for index, dict in enumerate(data):
+        drawn_numbers = dict['drawn_numbers']
+
+        if all(num % 2 == 0 for num in drawn_numbers):
+            how_many_counter += 1
+            which_lines_counter.append(index)
+    
+    print("Jest " + how_many_counter + " losowań z samymi liczbami parzystymi.")
+
+
+
+def run_excercise_2():
+#? zadanie 2: suma wylosowanych liczb w przedziale 110 - 190
+    data = get_data()
+    how_many_counter = 0
+    which_lines_counter = []
+
+    for index, dict in enumerate(data):
+        drawn_numbers = dict['drawn_numbers']
+        drawn_sum = sum(drawn_numbers)
+
+        if 110 <= drawn_sum <= 190:
+            how_many_counter += 1
+            which_lines_counter.append(index)
+
+    print("Jest " + how_many_counter + " losowań w których suma liczb znajduje się w przedziale od 110 do 190.")
+
+
+
+
+def run_excercise_3():
+#? zadanie 3: suma cyfr wszystkich wylosowanych liczb równa 50
+    data = get_data()
+    how_many_counter = 0
+    which_lines_counter = []
+    target_sum = 50
+
+    for index, dict in enumerate(data):
+        drawn_numbers = dict['drawn_numbers']
+
+        if sum(sum(map(int, num)) for num in drawn_numbers) == target_sum:
+            # example list: ["123", "45", "67"]
+            # (1+2+3) + (4+5) + (6+7) ?= 50
+            how_many_counter += 1
+            which_lines_counter.append(index)
+
+    print("Jest " + how_many_counter + " losowań z sumą cyfr wylosowanych liczb równą " + target_sum + ".")
+
+
+
+def run_excercise_4():
+#? zadanie 4: różnica między największą a najmniejszą równa 30
+    data = get_data()
+    how_many_counter = 0
+    which_lines_counter = []
+    target_value = 30
+
+    for index, dict in enumerate(data):
+        drawn_numbers = dict['drawn_numbers']
+        sorted_numbers = sorted(drawn_numbers)
+        first = sorted_numbers[0]
+        last = sorted_numbers[-1]
+        difference = last - first
+
+        if difference == target_value
+            how_many_counter += 1
+            which_lines_counter.append(index)
+
+    print("Jest " + how_many_counter + " losowań z róźnicą między największą a najmniejszą liczbą równą " + target_value + ".")
+
+
+
+def run_excercise_5():
+#? zadanie 5: cztery wylosowane liczby o takiej samej ostatniej cyfrze
+    example = 0
+
+
+
+def run_excercise_6():
+#? zadanie 6: cztery wylosowane liczby w jednym z zakresów: 1-9 albo 10-19 albo 20-29 albo 30-39 albo 40-49
+    example = 0
+
+
+
+def run_excercise_7():
+#? zadanie 7: własne ciekawe przetwarzanie
+    example = 0
 
 
 
 ## ******   Functions: Others   ******
+
+def clear():
+    os.system('clear')
 
 def end_program():
     msg = "Dziękujemy za skorzystanie z programu."
@@ -149,13 +256,4 @@ def end_program():
 
 # *************   Operations   *************
 
-while True:
-    menu()
-    end_check = input("Aby zamknąć program wciśnij 0 na klawiaturze, każdy inny wpis otworzy program na nowo.")
-
-    if end_check.isdigit() and end_check == 0:
-        break
-    else:
-        continue
-
-exit()
+init()
